@@ -55,6 +55,15 @@ public class AttendanceController {
                 response.setPredictionDetail("Maintain perfect attendance to stay on track.");
             }
         } else {
+            if (required == 100.0 && attended < total) {
+                response.setStatus("error");
+                response.setStatusBadge("Unreachable");
+                response.setMessage("Cannot reach 100% attendance once classes are missed.");
+                response.setPrediction("Target unreachable");
+                response.setPredictionDetail("It's mathematically impossible to achieve 100% attendance.");
+                return response;
+            }
+            
             int classesToAttend = calculateClassesToAttend(attended, total, required);
             double percentageAfterAttend = ((attended + classesToAttend) * 100.0) / (total + classesToAttend);
             
@@ -71,37 +80,22 @@ public class AttendanceController {
     }
     
     private int calculateClassesToSkip(int attended, int total, double required) {
-        int classesToSkip = 0;
-        while (true) {
-            double futurePercentage = (attended * 100.0) / (total + classesToSkip + 1);
-            if (futurePercentage >= required) {
-                classesToSkip++;
-            } else {
-                break;
-            }
+        if (required == 0) {
+            return Integer.MAX_VALUE;
         }
-        return classesToSkip;
+        
+        double r = required / 100.0;
+        int classesToSkip = (int) Math.floor((attended / r) - total);
+        return Math.max(0, classesToSkip);
     }
     
     private int calculateClassesToAttend(int attended, int total, double required) {
-        int classesToAttend = 0;
-        int futureAttended = attended;
-        int futureTotal = total;
-        
-        while (true) {
-            futureAttended++;
-            futureTotal++;
-            classesToAttend++;
-            
-            double futurePercentage = (futureAttended * 100.0) / futureTotal;
-            if (futurePercentage >= required) {
-                break;
-            }
-            
-            if (classesToAttend > 1000) {
-                break;
-            }
+        if (required == 100.0) {
+            return 0;
         }
-        return classesToAttend;
+        
+        double r = required / 100.0;
+        int classesToAttend = (int) Math.ceil((r * total - attended) / (1.0 - r));
+        return Math.max(0, classesToAttend);
     }
 }
