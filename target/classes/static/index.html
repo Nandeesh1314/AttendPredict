@@ -17,6 +17,74 @@
             min-height: 100vh;
             color: #e0e0e0;
             padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        body.light-theme {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #dbeafe 100%);
+            color: #1f2937;
+        }
+
+        body.light-theme .header-title h1 {
+            color: #1f2937;
+        }
+
+        body.light-theme .header-title p,
+        body.light-theme .card-header p,
+        body.light-theme .input-group label,
+        body.light-theme .feature-description,
+        body.light-theme .result-message,
+        body.light-theme .prediction-detail,
+        body.light-theme .percentage-label {
+            color: #6b7280;
+        }
+
+        body.light-theme .calculator-card,
+        body.light-theme .feature-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .card-header h2,
+        body.light-theme .feature-title,
+        body.light-theme .how-it-works h3 {
+            color: #1f2937;
+        }
+
+        body.light-theme .input-group input {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            color: #1f2937;
+        }
+
+        body.light-theme .input-group input::placeholder {
+            color: #9ca3af;
+        }
+
+        body.light-theme .btn-secondary {
+            background: rgba(0, 0, 0, 0.05);
+            color: #4b5563;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+        }
+
+        body.light-theme .btn-secondary:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .theme-toggle {
+            background: rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            color: #1f2937;
+        }
+
+        body.light-theme .result-card {
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .percentage-value {
+            color: #1f2937;
         }
 
         .header {
@@ -364,7 +432,7 @@
                 <p>Smart attendance tracking for students</p>
             </div>
         </div>
-        <button class="theme-toggle">☀️</button>
+        <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">☀️</button>
     </div>
 
     <div class="container">
@@ -454,6 +522,33 @@
     </div>
 
     <script>
+        // Theme toggle functionality
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById('themeToggle');
+            
+            body.classList.toggle('light-theme');
+            
+            if (body.classList.contains('light-theme')) {
+                themeToggle.textContent = '🌙';
+                localStorage.setItem('theme', 'light');
+            } else {
+                themeToggle.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Load saved theme on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeToggle = document.getElementById('themeToggle');
+            
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-theme');
+                themeToggle.textContent = '🌙';
+            }
+        });
+
         document.getElementById('attendanceForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
