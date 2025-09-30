@@ -1,0 +1,3 @@
+com\example\attendancepredictor\controller\AttendanceController.class
+com\example\attendancepredictor\model\AttendanceResponse.class
+com\example\attendancepredictor\AttendancePredictorApplication.class
